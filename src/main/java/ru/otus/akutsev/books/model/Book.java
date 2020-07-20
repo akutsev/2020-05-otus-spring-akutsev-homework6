@@ -30,7 +30,7 @@ public class Book {
 	@JoinColumn(name = "genre_id", nullable = false)
 	private Genre genre;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "book_id")
 	private List<Comment> comments = new ArrayList<>();
 

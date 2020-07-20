@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.akutsev.books.dao.BookDao;
+import ru.otus.akutsev.books.dao.CommentDao;
 import ru.otus.akutsev.books.model.Author;
 import ru.otus.akutsev.books.model.Book;
+import ru.otus.akutsev.books.model.Comment;
 import ru.otus.akutsev.books.model.Genre;
 
 import java.util.List;
@@ -15,16 +17,18 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService{
 
 	private final BookDao bookDao;
+	private final CommentDao commentDao;
 
 	@Autowired
-	public BookServiceImpl(BookDao bookDao) {
+	public BookServiceImpl(BookDao bookDao, CommentDao commentDao) {
 		this.bookDao = bookDao;
+		this.commentDao = commentDao;
 	}
 
 	@Override
 	@Transactional
-	public Book add(Book book) {
-		return bookDao.add(book);
+	public Book save(Book book) {
+		return bookDao.save(book);
 	}
 
 	@Override
@@ -42,12 +46,22 @@ public class BookServiceImpl implements BookService{
 	@Override
 	@Transactional
 	public void updateBook (Book book, String newName, Author newAuthor, Genre newGenre) {
-		bookDao.updateBook(book, newName, newAuthor, newGenre);
+		book.setAuthor(newAuthor);
+		book.setGenre(newGenre);
+		book.setName(newName);
+
+		bookDao.save(book);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Comment> getAllComments(Book book) {
+		return commentDao.getAllComments(book);
 	}
 
 	@Override
 	@Transactional
-	public void delete (int id) {
-		bookDao.delete(id);
+	public void delete (Book book) {
+		bookDao.delete(book);
 	}
 }

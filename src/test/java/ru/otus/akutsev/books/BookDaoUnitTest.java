@@ -52,7 +52,7 @@ public class BookDaoUnitTest {
 		entityManager.persist(comment1);
 		entityManager.persist(comment2);
 
-		long id = bookDao.add(book).getId();
+		long id = bookDao.save(book).getId();
 
 		entityManager.clear();
 		Book bookFromDb = bookDao.getAById(id).get();
@@ -76,35 +76,14 @@ public class BookDaoUnitTest {
 		assertArrayEquals(expected, actual);
 	}
 
-	@DisplayName("изменение названия и автора")
-	@Test
-	public void updateBookTest() {
-		long bookId = 1;
-		Book book = bookDao.getAById(bookId).get();
-
-		long newAuthorId = 5;
-		Author newAuthor = entityManager.find(Author.class, newAuthorId);
-		String newName = "I am in love with killer";
-		Genre oldGenre = book.getGenre();
-
-		bookDao.updateBook(book,newName, newAuthor, oldGenre);
-		entityManager.detach(book);
-		Book updatedBook = bookDao.getAById(bookId).get();
-
-		assertEquals(newName, updatedBook.getName());
-		assertEquals(newAuthor, updatedBook.getAuthor());
-		assertEquals(oldGenre, updatedBook.getGenre());
-	}
-
 	@DisplayName("удаление книги")
 	@Test
 	public void deleteBookTest() {
 		long id = 2;
+		Book book = entityManager.find(Book.class, id);
+
 		assertNotEquals(Optional.empty(), bookDao.getAById(id));
-
-		bookDao.delete(id);
-		entityManager.clear();
-
+		bookDao.delete(book);
 		assertEquals(Optional.empty(), bookDao.getAById(id));
 	}
 }

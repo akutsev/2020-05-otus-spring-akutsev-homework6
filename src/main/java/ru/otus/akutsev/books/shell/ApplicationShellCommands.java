@@ -34,7 +34,7 @@ public class ApplicationShellCommands {
 		book.setGenre(genre);
 		book.setAuthor(author);
 
-		bookService.add(book);
+		bookService.save(book);
 		System.out.println("Book added");
 	}
 
@@ -53,7 +53,14 @@ public class ApplicationShellCommands {
 
 	@ShellMethod(value = "Delete book", key = {"delete"})
 	public void deleteBook(int id) {
-		bookService.delete(id);
+		Book bookToDelete = bookService.getAById(id).get();
+		bookService.delete(bookToDelete);
 		System.out.println(String.format("Book with id = %s deleted", id));
+	}
+
+	@ShellMethod(value = "Show all book's comments", key = {"comments"})
+	public void showAllComments(int id) {
+		Book bookToShowComments = bookService.getAById(id).get();
+		bookService.getAllComments(bookToShowComments).forEach(comment -> System.out.println(comment.getText()));
 	}
 }

@@ -19,7 +19,7 @@ public class BookServiceIntegrationTest {
 	@Autowired
 	BookService bookService;
 
-	@DisplayName("на примере добавления+извлечения книги")
+	@DisplayName("добавление + извлечение книги")
 	@Test
 	public void addBookGetByIdTest() {
 		String authorName = "Lev Tolstoy";
@@ -38,12 +38,35 @@ public class BookServiceIntegrationTest {
 
 		assertFalse(bookService.getAll().contains(book));
 
-		long id = bookService.add(book).getId();
+		long id = bookService.save(book).getId();
 
 		Book bookFromDb = bookService.getAById(id).get();
 		assertEquals(bookName, bookFromDb.getName());
 		assertEquals(author.getName(), bookFromDb.getAuthor().getName());
 		assertEquals(genre.getGenreName(), bookFromDb.getGenre().getGenreName());
+	}
+
+	@DisplayName("Изменение полей книги")
+	@Test
+	public void updateBookTest() {
+		long id = 1;
+		Book book = bookService.getAById(id).get();
+
+		String authorName = "Fedor Dostoevskiy";
+		Author newAuthor = new Author();
+		newAuthor.setName(authorName);
+
+		String genreName = "Psychological criminal drama";
+		Genre newGenre = new Genre();
+		newGenre.setGenreName(genreName);
+
+		String bookName = "Crime and punishment";
+
+		bookService.updateBook(book, bookName, newAuthor, newGenre);
+
+		assertEquals(bookName, book.getName());
+		assertEquals(newAuthor, book.getAuthor());
+		assertEquals(newGenre, book.getGenre());
 	}
 
 }

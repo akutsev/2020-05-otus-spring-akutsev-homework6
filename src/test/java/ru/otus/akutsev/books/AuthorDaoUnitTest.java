@@ -32,7 +32,7 @@ public class AuthorDaoUnitTest {
 		Author author = new Author();
 		author.setName(name);
 
-		long id = authorDao.add(author).getId();
+		long id = authorDao.save(author).getId();
 
 		entityManager.clear();
 		Author authorFromDb = authorDao.getAById(id).get();
@@ -40,29 +40,14 @@ public class AuthorDaoUnitTest {
 		assertEquals(name, authorFromDb.getName());
 	}
 
-	@DisplayName("изменение имени автора")
-	@Test
-	public void updateAuthorTest() {
-		long id = 1;
-		Author author = entityManager.find(Author.class, id);
-		String newName = "Lev Nikolaevich Tolstoy";
-
-		authorDao.updateName(author,newName);
-		entityManager.detach(author);
-		Author updatedAuthor = entityManager.find(Author.class, id);
-
-		assertEquals(newName, updatedAuthor.getName());
-	}
-
 	@DisplayName("удаление автора")
 	@Test
 	public void deleteAuthorTest() {
 		long id = 5;
+		Author authorToDelete = entityManager.find(Author.class, id);
+
 		assertNotEquals(Optional.empty(), authorDao.getAById(id));
-
-		authorDao.delete(id);
-		entityManager.clear();
-
+		authorDao.delete(authorToDelete);
 		assertEquals(Optional.empty(), authorDao.getAById(id));
 	}
 

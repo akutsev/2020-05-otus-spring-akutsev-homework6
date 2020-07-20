@@ -30,5 +30,5 @@ CREATE TABLE comments (
   TEXT VARCHAR(250) NOT NULL,
   BOOK_ID BIGINT NOT NULL,
   PRIMARY KEY (ID),
-  foreign key (BOOK_ID) references books(ID) ON DELETE CASCADE ON UPDATE CASCADE
+  foreign key (BOOK_ID) references books(ID) ON DELETE CASCADE
 );

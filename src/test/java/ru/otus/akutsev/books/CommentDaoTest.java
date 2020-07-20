@@ -11,10 +11,10 @@ import ru.otus.akutsev.books.dao.CommentDaoImpl;
 import ru.otus.akutsev.books.model.Book;
 import ru.otus.akutsev.books.model.Comment;
 
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Тест ДАО работы с комментариями")
 @DataJpaTest
@@ -38,7 +38,7 @@ public class CommentDaoTest {
 		comment.setText(text);
 		comment.setBook(book);
 
-		long id = commentDao.add(comment).getId();
+		long id = commentDao.save(comment).getId();
 
 		entityManager.clear();
 		Comment commentFromDb = commentDao.getAById(id).get();
@@ -47,29 +47,30 @@ public class CommentDaoTest {
 		assertEquals(book, commentFromDb.getBook());
 	}
 
-	@DisplayName("изменение текста комментария")
-	@Test
-	public void updateCommentTest() {
-		long id = 2;
-		String newText = "I'm sorry, this book worth 4 stars!";
-		Comment comment = entityManager.find(Comment.class, id);
-
-		commentDao.updateCommentText(comment,newText);
-		entityManager.detach(comment);
-		Comment updatedComment = entityManager.find(Comment.class, id);
-
-		assertEquals(newText, updatedComment.getText());
-	}
-
 	@DisplayName("удаление комментария")
 	@Test
 	public void deleteGenreTest() {
 		long id = 4;
+		Comment commentToDelete = entityManager.find(Comment.class, id);
+
 		assertNotEquals(Optional.empty(), commentDao.getAById(id));
-
-		commentDao.delete(id);
-		entityManager.clear();
-
+		commentDao.delete(commentToDelete);
 		assertEquals(Optional.empty(), commentDao.getAById(id));
+	}
+
+	@DisplayName("извлечение всех комментариев книги")
+	@Test
+	public void getAllCommentsByBook() {
+		long id = 1;
+		Book book = entityManager.find(Book.class, id);
+
+		List<Comment> comments = commentDao.getAllComments(book);
+
+		String[] expected = {"Book that you will never forget, 5 stars!", "Honestly I did not like that, 3 stars"};
+		String[] actual = comments.stream()
+				.map(comment -> comment.getText())
+				.toArray(String[]::new);
+
+		assertArrayEquals(expected, actual);
 	}
 }

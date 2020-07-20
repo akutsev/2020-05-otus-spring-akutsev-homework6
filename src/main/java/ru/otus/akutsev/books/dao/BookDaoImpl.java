@@ -1,9 +1,8 @@
 package ru.otus.akutsev.books.dao;
 
 import org.springframework.stereotype.Repository;
-import ru.otus.akutsev.books.model.Author;
 import ru.otus.akutsev.books.model.Book;
-import ru.otus.akutsev.books.model.Genre;
+import ru.otus.akutsev.books.model.Comment;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,13 +15,7 @@ public class BookDaoImpl implements BookDao{
 	EntityManager entityManager;
 
 	@Override
-	public Book add(Book book) {
-//		if (book.getId() == 0) {
-//			entityManager.persist(book);
-//			return book;
-//		} else {
-//			return entityManager.merge(book);
-//		}
+	public Book save(Book book) {
 		return entityManager.merge(book);
 	}
 
@@ -42,21 +35,8 @@ public class BookDaoImpl implements BookDao{
 	}
 
 	@Override
-	public void updateBook (Book book, String newName, Author newAuthor, Genre newGenre) {
-		Query query = entityManager.createQuery("update Book b set b.name = :name, b.author = :author," +
-				"b.genre = :genre where b.id = :id");
-		query.setParameter("name", newName);
-		query.setParameter("author", newAuthor);
-		query.setParameter("genre", newGenre);
-		query.setParameter("id", book.getId());
-		query.executeUpdate();
-	}
-
-	@Override
-	public void delete (long id) {
-		Query query = entityManager.createQuery("delete from Book s where s.id = :id");
-		query.setParameter("id", id);
-		query.executeUpdate();
+	public void delete (Book book) {
+		entityManager.remove(book);
 	}
 
 }

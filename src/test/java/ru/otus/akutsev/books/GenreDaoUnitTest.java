@@ -33,7 +33,7 @@ public class GenreDaoUnitTest {
 		Genre genre = new Genre();
 		genre.setGenreName(name);
 
-		long id = genreDao.add(genre).getId();
+		long id = genreDao.save(genre).getId();
 
 		entityManager.clear();
 		Genre genreFromDb = genreDao.getAById(id).get();
@@ -41,29 +41,14 @@ public class GenreDaoUnitTest {
 		assertEquals(name, genreFromDb.getGenreName());
 	}
 
-	@DisplayName("изменение имени жанра")
-	@Test
-	public void updateGenreTest() {
-		long id = 2;
-		String newName = "Romance";
-		Genre genre = entityManager.find(Genre.class, id);
-
-		genreDao.updateGenreName(genre,newName);
-		entityManager.detach(genre);
-		Genre updatedGenre = entityManager.find(Genre.class, id);
-
-		assertEquals(newName, updatedGenre.getGenreName());
-	}
-
 	@DisplayName("удаление жанра")
 	@Test
 	public void deleteGenreTest() {
 		long id = 8;
+		Genre genreToDelete = entityManager.find(Genre.class, id);
+
 		assertNotEquals(Optional.empty(), genreDao.getAById(id));
-
-		genreDao.delete(id);
-		entityManager.clear();
-
+		genreDao.delete(genreToDelete);
 		assertEquals(Optional.empty(), genreDao.getAById(id));
 	}
 }

@@ -6,9 +6,8 @@ import java.util.Optional;
 
 public interface AuthorDao {
 
-	public Author add(Author author);
-	public Optional<Author> getAById(long id);
-	public void updateName(Author author, String newName);
-	public void delete (long id);
+	Author save(Author author);
+	Optional<Author> getAById(long id);
+	void delete (Author author);
 
 }

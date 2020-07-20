@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface GenreDao {
 
-	public Genre add(Genre genre);
-	public Optional<Genre> getAById(long id);
-	public void updateGenreName(Genre genre, String newName);
-	public void delete (long id);
+	Genre save(Genre genre);
+	Optional<Genre> getAById(long id);
+	void delete (Genre genre);
+
 }

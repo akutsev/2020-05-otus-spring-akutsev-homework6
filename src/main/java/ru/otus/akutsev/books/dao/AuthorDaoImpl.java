@@ -15,13 +15,8 @@ public class AuthorDaoImpl implements AuthorDao{
 	private EntityManager entityManager;
 
 	@Override
-	public Author add(Author author) {
-		if (author.getId() == 0) {
-			entityManager.persist(author);
-			return author;
-		} else {
-			return entityManager.merge(author);
-		}
+	public Author save(Author author) {
+		return entityManager.merge(author);
 	}
 
 	@Override
@@ -30,18 +25,8 @@ public class AuthorDaoImpl implements AuthorDao{
 	}
 
 	@Override
-	public void updateName(Author author, String newName) {
-		Query query = entityManager.createQuery("update Author a set a.name = :name where a.id = :id");
-		query.setParameter("id", author.getId());
-		query.setParameter("name", newName);
-		query.executeUpdate();
-	}
-
-	@Override
-	public void delete (long id) {
-		Query query = entityManager.createQuery("delete from Author a where a.id = :id");
-		query.setParameter("id", id);
-		query.executeUpdate();
+	public void delete (Author author) {
+		entityManager.remove(author);
 	}
 
 }
