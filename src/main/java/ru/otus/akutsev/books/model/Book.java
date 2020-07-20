@@ -22,11 +22,11 @@ public class Book {
 	@Column(name = "name")
 	private String name;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "author_id", nullable = false)
 	private Author author;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name = "genre_id", nullable = false)
 	private Genre genre;
 
@@ -87,7 +87,6 @@ public class Book {
 				", name='" + name + '\'' +
 				", author=" + author.getName() +
 				", genre=" + genre.getGenreName() +
-				", comments=" + comments.stream().map(comment -> comment.getText()).collect(Collectors.joining()) +
 				'}';
 	}
 

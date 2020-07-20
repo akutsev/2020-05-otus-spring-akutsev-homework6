@@ -3,6 +3,7 @@ package ru.otus.akutsev.books.shell;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.akutsev.books.dao.AuthorDao;
 import ru.otus.akutsev.books.dao.GenreDao;
 import ru.otus.akutsev.books.model.Author;
@@ -25,6 +26,7 @@ public class ApplicationShellCommands {
 	}
 
 	@ShellMethod(value = "Add book", key = {"add"})
+	@Transactional
 	public void addBook(String name, int authorId, int genreId) {
 		Book book = new Book();
 
@@ -45,6 +47,7 @@ public class ApplicationShellCommands {
 	}
 
 	@ShellMethod(value = "Update Book", key = {"update"})
+	@Transactional
 	public void updateBook(int id, String newName, int newAuthorId, int newGenreId) {
 		bookService.updateBook(bookService.getAById(id).get(), newName, authorDao.getAById(newAuthorId).get(),
 				genreDao.getAById(newGenreId).get());
