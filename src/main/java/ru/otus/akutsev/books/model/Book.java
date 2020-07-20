@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 @Table(name = "books")
 @NamedEntityGraph(name = "books-entity-graph", attributeNodes = {
 		@NamedAttributeNode("author"),
-		@NamedAttributeNode("genre"),
-		@NamedAttributeNode("comments")
+		@NamedAttributeNode("genre")
 })
 public class Book {
 
